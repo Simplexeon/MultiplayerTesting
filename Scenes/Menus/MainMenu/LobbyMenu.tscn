@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://crhy2srrdccwj"]
+
+[ext_resource type="Script" path="res://Scenes/Menus/MainMenu/PlayerList.gd" id="1_guuyo"]
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="Centered" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerList" type="VBoxContainer" parent="Centered" groups=["GLobbyPlayerList"]]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -289.5
+offset_top = -164.5
+offset_right = -70.5
+offset_bottom = 194.5
+grow_horizontal = 2
+script = ExtResource("1_guuyo")
