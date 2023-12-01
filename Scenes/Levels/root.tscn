@@ -11,9 +11,12 @@ script = ExtResource("1_mlm67")
 [node name="StartMenu" parent="." instance=ExtResource("2_2rrub")]
 
 [node name="Lobby" parent="." instance=ExtResource("3_u6th0")]
+visible = false
 
 [node name="MultiplayerController" type="Node2D" parent="." groups=["GMultiplayerController"]]
 script = ExtResource("1_fqq31")
+IpParam = "127.0.0.1"
+PortParam = 44859
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 

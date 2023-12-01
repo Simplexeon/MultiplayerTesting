@@ -10,7 +10,7 @@ var player_name : String = "";
 
 # Functions
 
-func initialize(set_name : String, color : Color) -> void:
-	player_name = set_name;
+func initialize(new_name : String, color : Color) -> void:
+	player_name = new_name;
 	NameLabel.text = player_name;
 	ColorIndicator.modulate = color;

@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cuv1a38e1aa5d"]
+[gd_scene load_steps=4 format=3 uid="uid://cuv1a38e1aa5d"]
 
 [ext_resource type="Texture2D" uid="uid://bb7q11ku64243" path="res://icon.svg" id="1_o1dtj"]
+[ext_resource type="Script" path="res://Scenes/Menus/MainMenu/JoinGameButton.gd" id="2_rtnvk"]
+[ext_resource type="Script" path="res://Scenes/Menus/MainMenu/StartServerButton.gd" id="3_y28fb"]
 
-[node name="StartMenu" type="Control"]
+[node name="StartMenu" type="Control" groups=["GStartMenu"]]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1152.0
@@ -23,7 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="JoinGameButton" type="TextureButton" parent="Centered"]
-modulate = Color(0.14902, 1, 0.188235, 1)
+self_modulate = Color(0, 1, 0, 1)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -33,8 +35,10 @@ offset_right = 128.0
 offset_bottom = 64.0
 grow_vertical = 2
 texture_normal = ExtResource("1_o1dtj")
+script = ExtResource("2_rtnvk")
 
-[node name="Label" type="Label" parent="Centered/JoinGameButton"]
+[node name="JoinLabel" type="Label" parent="Centered/JoinGameButton"]
+modulate = Color(0.0235294, 1, 0.117647, 1)
 layout_mode = 1
 offset_left = -40.5
 offset_top = -97.0
@@ -42,6 +46,17 @@ offset_right = 186.5
 offset_bottom = -33.0
 theme_override_font_sizes/font_size = 46
 text = "Join Game"
+
+[node name="ErrorLabel" type="Label" parent="Centered/JoinGameButton"]
+visible = false
+modulate = Color(1, 0.388235, 0.384314, 1)
+layout_mode = 0
+offset_left = -33.5
+offset_top = 135.0
+offset_right = 183.5
+offset_bottom = 169.0
+theme_override_font_sizes/font_size = 24
+text = "Error Joining Game"
 
 [node name="StartServerButton" type="TextureButton" parent="Centered"]
 modulate = Color(0.14902, 1, 1, 1)
@@ -57,12 +72,16 @@ offset_bottom = 64.0
 grow_horizontal = 0
 grow_vertical = 2
 texture_normal = ExtResource("1_o1dtj")
+script = ExtResource("3_y28fb")
 
 [node name="Label" type="Label" parent="Centered/StartServerButton"]
 layout_mode = 1
-offset_left = -40.5
-offset_top = -97.0
-offset_right = 186.5
-offset_bottom = -33.0
+offset_left = -63.5
+offset_top = -96.0
+offset_right = 200.5
+offset_bottom = -32.0
 theme_override_font_sizes/font_size = 46
-text = "StartServer"
+text = "Start Server"
+
+[connection signal="pressed" from="Centered/JoinGameButton" to="Centered/JoinGameButton" method="_on_pressed"]
+[connection signal="pressed" from="Centered/StartServerButton" to="Centered/StartServerButton" method="_on_pressed"]

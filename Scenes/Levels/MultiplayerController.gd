@@ -64,17 +64,13 @@ func _on_serverDisconnected() -> void:
 
 
 @rpc("authority", "reliable", "call_remote")
-func _on_receiveStartInfo(player_info : Array[Classes.PlayerInfo]) -> void:
-	players = player_info;
-	
+func _on_receiveLobbyUpdate(player_id : int, player_color : String) -> void:
+	var new_player_info : Classes.PlayerInfo = Classes.PlayerInfo.new();
+	new_player_info.id = player_id;
+	new_player_info.color = Color(player_color);
+	players.append(new_player_info);
 	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
-	for player in players:
-		PlayerListDisplay.addPlayerInfo(str(player.id), player.color);
-
-
-@rpc("authority", "reliable", "call_remote")
-func _on_receiveLobbyUpdate(player_info : Classes.PlayerInfo) -> void:
-	players.append(player_info);
+	PlayerListDisplay.addPlayerInfo(str(player_id), Color(player_color));
 
 
 # Functions
@@ -95,20 +91,32 @@ func startGame() -> void:
 
 
 func startServer() -> void:
-	var peer = ENetMultiplayerPeer.new();
-	var error = peer.create_server(PortParam);
+	var peer : ENetMultiplayerPeer = ENetMultiplayerPeer.new();
+	var error : Error = peer.create_server(PortParam);
 	if(error):
 		return;
 	multiplayer.multiplayer_peer = peer;
 
 
+func joinGame() -> bool:
+	var peer : ENetMultiplayerPeer = ENetMultiplayerPeer.new();
+	var error : Error = peer.create_client(IpParam, PortParam);
+	if(error):
+		return false;
+	multiplayer.multiplayer_peer = peer;
+	return true;
+
+
 func updateLobby(id : int) -> void:
+	for player in players:
+		_on_receiveLobbyUpdate.rpc_id(id, player.id, player.color.to_html());
 	var new_player_info : Classes.PlayerInfo = Classes.PlayerInfo.new();
 	new_player_info.id = id;
 	new_player_info.color = getNewColor();
 	players.append(new_player_info);
-	_on_receiveLobbyUpdate.rpc(new_player_info);
-	_on_receiveStartInfo.rpc_id(id, players);
+	_on_receiveLobbyUpdate.rpc(new_player_info.id, new_player_info.color.to_html());
+	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
+	PlayerListDisplay.addPlayerInfo(str(new_player_info.id), new_player_info.color);
 
 
 func getNewColor() -> Color :

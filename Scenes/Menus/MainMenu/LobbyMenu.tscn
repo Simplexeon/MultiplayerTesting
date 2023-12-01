@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scenes/Menus/MainMenu/PlayerList.gd" id="1_guuyo"]
 
-[node name="Lobby" type="Control"]
+[node name="Lobby" type="Control" groups=["GLobbyMenu"]]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1152.0
