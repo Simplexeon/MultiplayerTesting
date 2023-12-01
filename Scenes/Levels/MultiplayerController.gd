@@ -64,13 +64,13 @@ func _on_serverDisconnected() -> void:
 
 
 @rpc("authority", "reliable", "call_remote")
-func _on_receiveLobbyUpdate(player_id : int, player_color : String) -> void:
+func _on_receiveLobbyUpdate(player_id : int, player_color : String, player_ready : bool) -> void:
 	var new_player_info : Classes.PlayerInfo = Classes.PlayerInfo.new();
 	new_player_info.id = player_id;
 	new_player_info.color = Color(player_color);
 	players.append(new_player_info);
 	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
-	PlayerListDisplay.addPlayerInfo(str(player_id), Color(player_color));
+	PlayerListDisplay.addPlayerInfo(str(player_id), Color(player_color), player_ready);
 
 
 # Functions
@@ -109,14 +109,14 @@ func joinGame() -> bool:
 
 func updateLobby(id : int) -> void:
 	for player in players:
-		_on_receiveLobbyUpdate.rpc_id(id, player.id, player.color.to_html());
+		_on_receiveLobbyUpdate.rpc_id(id, player.id, player.color.to_html(), player.ready);
 	var new_player_info : Classes.PlayerInfo = Classes.PlayerInfo.new();
 	new_player_info.id = id;
 	new_player_info.color = getNewColor();
 	players.append(new_player_info);
-	_on_receiveLobbyUpdate.rpc(new_player_info.id, new_player_info.color.to_html());
+	_on_receiveLobbyUpdate.rpc(new_player_info.id, new_player_info.color.to_html(), false);
 	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
-	PlayerListDisplay.addPlayerInfo(str(new_player_info.id), new_player_info.color);
+	PlayerListDisplay.addPlayerInfo(str(new_player_info.id), new_player_info.color, false);
 
 
 func getNewColor() -> Color :

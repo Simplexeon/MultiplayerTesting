@@ -1,13 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5w3lisfv530l"]
+[gd_scene load_steps=5 format=3 uid="uid://c5w3lisfv530l"]
 
 [ext_resource type="Texture2D" uid="uid://c20k6kij7c56q" path="res://Sprites/Menus/Lobby/PlayerLobbyInfoBG.png" id="1_34jx2"]
 [ext_resource type="Script" path="res://Scenes/Menus/MainMenu/PlayerLobbyInfo.gd" id="1_sbf7a"]
 [ext_resource type="Texture2D" uid="uid://p4x5g0fa33cm" path="res://Sprites/Menus/Lobby/ColorIndicator.png" id="2_8fcot"]
+[ext_resource type="Texture2D" uid="uid://dfwwwvvmd6ywl" path="res://Sprites/Menus/Lobby/TickMarkSpriteSheet.png" id="4_yk5cw"]
 
 [node name="PlayerLobbyInfo" type="Control"]
 custom_minimum_size = Vector2(329, 56)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 377.0
+offset_bottom = 56.0
 script = ExtResource("1_sbf7a")
 
 [node name="BG" type="TextureRect" parent="."]
@@ -40,3 +43,8 @@ offset_right = 51.0
 offset_bottom = 49.0
 texture = ExtResource("2_8fcot")
 stretch_mode = 2
+
+[node name="TickMark" type="Sprite2D" parent="."]
+position = Vector2(337, 28)
+texture = ExtResource("4_yk5cw")
+hframes = 2
