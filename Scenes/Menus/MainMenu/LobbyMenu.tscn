@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://crhy2srrdccwj"]
+[gd_scene load_steps=4 format=3 uid="uid://crhy2srrdccwj"]
 
 [ext_resource type="Script" path="res://Scenes/Menus/MainMenu/PlayerList.gd" id="1_guuyo"]
+[ext_resource type="Texture2D" uid="uid://bb7q11ku64243" path="res://icon.svg" id="1_qlc4a"]
+[ext_resource type="Script" path="res://Scenes/Menus/MainMenu/ReadyButton.gd" id="3_nh22w"]
 
 [node name="Lobby" type="Control" groups=["GLobbyMenu"]]
 layout_mode = 3
@@ -33,3 +35,24 @@ offset_right = -70.5
 offset_bottom = 194.5
 grow_horizontal = 2
 script = ExtResource("1_guuyo")
+
+[node name="ReadyButton" type="TextureButton" parent="Centered" groups=["GReadyButton"]]
+layout_mode = 0
+offset_left = 105.5
+offset_top = -165.5
+offset_right = 233.5
+offset_bottom = -37.5
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("1_qlc4a")
+script = ExtResource("3_nh22w")
+
+[node name="Label" type="Label" parent="Centered/ReadyButton"]
+layout_mode = 0
+offset_left = -37.0
+offset_top = -85.0
+offset_right = 167.0
+offset_bottom = -27.0
+theme_override_font_sizes/font_size = 42
+text = "Ready Up!"
+
+[connection signal="pressed" from="Centered/ReadyButton" to="Centered/ReadyButton" method="_on_pressed"]

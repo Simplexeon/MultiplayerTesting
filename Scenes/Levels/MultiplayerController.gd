@@ -73,6 +73,20 @@ func _on_receiveLobbyUpdate(player_id : int, player_color : String, player_ready
 	PlayerListDisplay.addPlayerInfo(str(player_id), Color(player_color), player_ready);
 
 
+@rpc("any_peer", "reliable", "call_local")
+func _on_playerReady(player_id : int) -> void:
+	var player_info : Classes.PlayerInfo = getPlayerFromId(player_id);
+	if(player_info == null):
+		return;
+	player_info.ready = !player_info.ready;
+	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
+	if(player_info.ready):
+		PlayerListDisplay.readyPlayer(str(player_id));
+	else:
+		PlayerListDisplay.unreadyPlayer(str(player_id));
+
+
+
 # Functions
 
 func startGame() -> void:
@@ -117,6 +131,19 @@ func updateLobby(id : int) -> void:
 	_on_receiveLobbyUpdate.rpc(new_player_info.id, new_player_info.color.to_html(), false);
 	var PlayerListDisplay : LobbyPlayerList = tree.get_first_node_in_group("GLobbyPlayerList");
 	PlayerListDisplay.addPlayerInfo(str(new_player_info.id), new_player_info.color, false);
+
+
+func toggleReady() -> void:
+	_on_playerReady.rpc(multiplayer.get_unique_id());
+
+
+func getPlayerFromId(player_id : int) -> Classes.PlayerInfo:
+	var i : int = 0;
+	while(i < players.size()):
+		if(players[i].id == player_id):
+			return players[i];
+		i += 1;
+	return null;
 
 
 func getNewColor() -> Color :
