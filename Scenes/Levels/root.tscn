@@ -18,6 +18,9 @@ script = ExtResource("1_fqq31")
 IpParam = "127.0.0.1"
 PortParam = 44859
 
+[node name="ServerQueryTimer" type="Timer" parent="MultiplayerController"]
+wait_time = 365.0
+
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="SpawnPoint" type="Node2D" parent="SpawnPoints" groups=["GSpawnPoints"]]
@@ -31,3 +34,5 @@ position = Vector2(778, 452)
 
 [node name="SpawnPoint4" type="Node2D" parent="SpawnPoints" groups=["GSpawnPoints"]]
 position = Vector2(768, 221)
+
+[connection signal="timeout" from="MultiplayerController/ServerQueryTimer" to="MultiplayerController" method="_on_server_query_timer_timeout"]
