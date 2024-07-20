@@ -5,15 +5,11 @@ extends Node2D
 @export_range(0, 66666) var PortParam : int;
 
 # Object Vars
-var connection_ip : String = IpParam;
-var connection_port : int = PortParam;
-var upnp : UPNP = null;
 var players : Array[Classes.PlayerInfo] = [];
 var colors : Array[Color] = [Color.RED, Color.WHITE, Color.BLUE, Color.GREEN, Color.ORANGE, Color.CYAN, Color.YELLOW];
 var next_color : int = 0; # Index of the next color in colors, will loop when max colors reached
 
 # Component Vars
-@onready var ServerQueryTimer : Timer = $ServerQueryTimer;
 @onready var tree : SceneTree = get_tree();
 
 # File Vars
@@ -36,15 +32,6 @@ func _ready() -> void:
 	#endregion
 	
 
-
-func _on_server_query_timer_timeout() -> void:
-	queryUPNP();
-
-
-func _exit_tree() -> void:
-	if(upnp != null):
-		upnp.delete_port_mapping(connection_port, "UDP");
-		upnp.delete_port_mapping(connection_port, "TCP");
 
 #region Connection Signals
 
@@ -118,43 +105,11 @@ func startGame() -> void:
 
 
 func startServer() -> void:
-	portForward();
 	var peer : ENetMultiplayerPeer = ENetMultiplayerPeer.new();
 	var error : Error = peer.create_server(PortParam);
 	if(error):
 		return;
 	multiplayer.multiplayer_peer = peer;
-
-
-func portForward() -> void:
-	upnp = UPNP.new();
-	var discover_result = upnp.discover();
-	
-	if(discover_result != UPNP.UPNP_RESULT_SUCCESS):
-		return;
-	
-	if(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
-		var map_result_udp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
-		var map_result_tcp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
-		while(map_result_udp == UPNP.UPNP_RESULT_CONFLICT_WITH_OTHER_MAPPING):
-			connection_port += 1;
-			if(connection_port - PortParam > 30):
-				return;
-			map_result_udp = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
-			map_result_tcp = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
-	
-	connection_ip = upnp.query_external_address();
-
-
-func queryUPNP() -> void:
-	if(upnp == null):
-		return;
-	
-	var map_result_udp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
-	var map_result_tcp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
-	
-	connection_ip = upnp.query_external_address();
-	ServerQueryTimer.start();
 
 
 func joinGame() -> bool:
