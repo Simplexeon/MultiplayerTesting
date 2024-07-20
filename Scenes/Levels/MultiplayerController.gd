@@ -120,7 +120,7 @@ func startGame() -> void:
 func startServer() -> void:
 	portForward();
 	var peer : ENetMultiplayerPeer = ENetMultiplayerPeer.new();
-	var error : Error = peer.create_server(connection_port);
+	var error : Error = peer.create_server(PortParam);
 	if(error):
 		return;
 	multiplayer.multiplayer_peer = peer;
@@ -133,29 +133,25 @@ func portForward() -> void:
 	if(discover_result != UPNP.UPNP_RESULT_SUCCESS):
 		return;
 	
-	print(upnp.get_device_count());
-	
 	if(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway()):
-		var map_result_udp : int = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
-		var map_result_tcp : int = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
+		var map_result_udp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
+		var map_result_tcp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
 		while(map_result_udp == UPNP.UPNP_RESULT_CONFLICT_WITH_OTHER_MAPPING):
 			connection_port += 1;
 			if(connection_port - PortParam > 30):
 				return;
 			map_result_udp = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
 			map_result_tcp = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
-		
-		connection_ip = upnp.query_external_address();
-		print(connection_port);
-		print(connection_ip);
+	
+	connection_ip = upnp.query_external_address();
 
 
 func queryUPNP() -> void:
 	if(upnp == null):
 		return;
 	
-	var map_result_udp : int = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
-	var map_result_tcp : int = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
+	var map_result_udp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_udp", "UDP");
+	var map_result_tcp : UPNP.UPNPResult = upnp.add_port_mapping(connection_port, 0, "godot_multiplayer_tcp", "TCP");
 	
 	connection_ip = upnp.query_external_address();
 	ServerQueryTimer.start();
